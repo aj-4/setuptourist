@@ -1,0 +1,69 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Setuptourist</h1>
+
+        <h4>Add a new creator</h4>
+        <input class="channel-input" type="text" placeholder="paste YouTube url" />
+        <button type="submit" onclick="submitChannel()">submit</button>
+        
+        <div class="container"></div>
+
+        <script>
+
+            function submitChannel() {
+                const channelURL = document.querySelector('.channel-input').value;
+                fetch('http://localhost:3000/creators', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({channelURL})
+                })    
+            }
+
+            function newEl(type, attrs={}) {
+                const el = document.createElement(type);
+                for (let attr in attrs) {
+                    const value = attrs[attr];
+                    if (attr == 'innerText') el.innerText = value;
+                    else el.setAttribute(attr, value);
+                }
+                return el;
+            }
+
+            async function loadCreators() {
+                const res = await fetch('http://localhost:3000/creators');
+                const creators = await res.json();
+
+                const ctr = document.querySelector('.container');
+
+                creators.forEach(creator => {
+                    const card = newEl('div', {class: 'card'});
+                    const title = newEl('h4', {innerText: creator.name});
+                    const img = newEl('img', {src: creator.img});
+                    img.style.width = '100px';
+                    card.appendChild(title);
+                    card.appendChild(img);
+                    ctr.appendChild(card);
+                })
+            }
+
+            loadCreators();
+
+        </script>
+        <style>
+            .container {
+                display: flex;
+            }
+            .card {
+                margin: 5px;
+                padding: 20px;
+                border: 1px solid white;
+            }
+        </style>
+
+    </body>
+</html>
