@@ -1,6 +1,6 @@
 # setuptourist
 
 dependencies:
-node v13
-npm
-mysql
+- node v13
+- npm
+- mysql
